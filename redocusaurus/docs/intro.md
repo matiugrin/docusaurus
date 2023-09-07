@@ -26,6 +26,9 @@ When new features are added to the API is recomended to contact the Retail Energ
 
 If an agent changes the configuration, some endpoints of the API may start failing if the new validations are not met and will require the API user to adapt their applications.
 
+### Release 2023-11
+- This is a test post [Using a Batch File](http://localhost:3000/).
+
 ### Release 2023-10
 - Now it's possible to post payment and credit card information using a batch file, see [Using a Batch File](http://localhost:3000/).
 
