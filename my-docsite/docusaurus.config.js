@@ -34,17 +34,42 @@ const config = {
             "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
+          customCss: [
+            require.resolve("./src/css/custom.css"),
+            require.resolve("@slashid/react/style.css"),
+          ] 
         },
       }),
     ],
   ],
 
+  themes: ["@slashid/docusaurus-theme-slashid"],
+  //themes: ['@docusaurus/theme-live-codeblock'],
+
   themeConfig:
     /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
     ({
+      slashID: {
+        orgID: "94aef655-94e2-4c82-52ea-20f93817d159",
+        // oidcClientID: "optional OIDC client ID",
+        // oidcProvider: "optional OIDC provider name",
+        forceLogin: false,
+        baseURL: "https://api.slashid.com",
+        // sdkURL: "optional base SDK page URL for the SDK, defaults to the production environment",
+        // privatePaths: [
+        //   {
+        //     path: "a glob or a regex specifiying the path to protect",
+        //     groups: ["optional list of groups that can access the path"],
+        //   }
+        // ],
+        // privatePaths: [
+        //   {
+        //     path: "/api/*",
+        //   },
+        // ],
+      },
       navbar: {
-        title: "My Site",
+        title: "Docusaurus OpenAPI",
         logo: {
           alt: "My Site Logo",
           src: "img/logo.svg",
@@ -114,6 +139,7 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
+
     }),
 };
 

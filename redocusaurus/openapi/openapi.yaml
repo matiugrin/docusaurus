@@ -1,0 +1,6290 @@
+openapi: 3.0.1
+info:
+  description: |
+    Built for and by Energy Professionals
+
+    ## Introduction
+    This API is documented in **OpenAPI format** and is based on
+    [Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team.
+    It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo)
+    tool and [ReDoc](https://github.com/Redocly/redoc) documentation. In addition to standard
+    OpenAPI syntax we use a few [vendor extensions](https://github.com/Redocly/redoc/blob/master/docs/redoc-vendor-extensions.md).
+
+    ## OpenAPI Specification
+    This API is documented in **OpenAPI format** and is based on
+    [Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team.
+    It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo)
+    tool and [ReDoc](https://github.com/Redocly/redoc) documentation. In addition to standard
+    OpenAPI syntax we use a few [vendor extensions](https://github.com/Redocly/redoc/blob/master/docs/redoc-vendor-extensions.md).
+
+    ## Cross-Origin Resource Sharing
+    This API features Cross-Origin Resource Sharing (CORS) implemented in compliance with  [W3C spec](https://www.w3.org/TR/cors/).
+    And that allows cross-domain communication from the browser.
+    All responses have a wildcard same-origin which makes them completely public and accessible to everyone, including any code on any site.
+
+    ## Authentication
+
+    Petstore offers two forms of authentication:
+      - API Key
+      - OAuth2
+      
+    OAuth2 - an open protocol to allow secure authorization in a simple
+    and standard method from web, mobile and desktop applications.
+  title: Stormcrest Restful API
+  version: '1.0'
+paths:
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Web Service Account login
+      parameters:
+        - name: token
+          in: query
+          description: Api key token
+          schema:
+            type: string
+        - name: timestamp
+          in: query
+          description: Unix timestamp (UTC)
+          schema:
+            type: string
+        - name: signature
+          in: query
+          description: Encrypted signature using token, timestamp and secret key
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+  
+  /api/v1/auth/refresh:
+    post:
+      tags:
+        - Auth
+      summary: Generate a refresh token
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+  /api/v1/billing/usage-history/{enrollId}:
+    get:
+      tags:
+        - Billing
+      summary: Get usage history
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/UsageHistoryModelListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/UsageHistoryModelListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/UsageHistoryModelListResponse'
+  /api/v1/billing/charges/{enrollId}:
+    get:
+      tags:
+        - Billing
+      summary: Get charges by enrollment
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: pageNumber
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BillingChargeModelListPagedResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BillingChargeModelListPagedResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BillingChargeModelListPagedResponse'
+  /api/v1/billing/statements/{enrollId}:
+    get:
+      tags:
+        - Billing
+      summary: Get statements by enrollment
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: pageNumber
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/StatementModelListPagedResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/StatementModelListPagedResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/StatementModelListPagedResponse'
+  /api/v1/billing/statements-pdf/{enrollId}:
+    get:
+      tags:
+        - Billing
+      summary: Get statement PDF
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: custStatementTkn
+          in: query
+          description: Statement Token
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/billing/summary/{enrollId}:
+    get:
+      tags:
+        - Billing
+      summary: Get billing summary
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BillingSummaryModelResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BillingSummaryModelResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BillingSummaryModelResponse'
+  /api/v1/billing/statement-summary/{enrollId}:
+    get:
+      tags:
+        - Billing
+      summary: Get statement summary
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/StatementSummaryModelResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/StatementSummaryModelResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/StatementSummaryModelResponse'
+  /api/v1/brands:
+    get:
+      tags:
+        - Brands
+      summary: Get All
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BrandResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BrandResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BrandResponseListResponse'
+  /api/v1/brands/{systemName}:
+    get:
+      tags:
+        - Brands
+      summary: Get By System Name
+      parameters:
+        - name: systemName
+          in: path
+          description: System Name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BrandResponseResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BrandResponseResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/BrandResponseResponse'
+  /api/v1/cities/county/{countyId}:
+    get:
+      tags:
+        - Cities
+      summary: Get Cities by county
+      parameters:
+        - name: countyId
+          in: path
+          description: County ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CityResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CityResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CityResponseListResponse'
+  /api/v1/configuration-parameters:
+    get:
+      tags:
+        - ConfigurationParameters
+      summary: Get All system setup configuration parameters
+      parameters:
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ConfigurationParametersResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ConfigurationParametersResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ConfigurationParametersResponse'
+  /api/v1/counties/state/{stateId}:
+    get:
+      tags:
+        - Counties
+      summary: Get counties by state
+      parameters:
+        - name: stateId
+          in: path
+          description: State ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CountyResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CountyResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CountyResponseListResponse'
+  /api/v1/customers/login:
+    post:
+      tags:
+        - Customers
+      summary: Customer login
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerAuthSuccessResponseResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerAuthSuccessResponseResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerAuthSuccessResponseResponse'
+  /api/v1/customers/{customerId}/profile:
+    get:
+      tags:
+        - Customers
+      summary: Logged customer profile information
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerResponseResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerResponseResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerResponseResponse'
+  /api/v1/customers/create-customer-quick-enrollment:
+    post:
+      tags:
+        - Customers
+      summary: Create customer from quick enrollment
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerQuickEnrollmentRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerQuickEnrollmentRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerQuickEnrollmentRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/customers/{customerId}/link-accounts:
+    post:
+      tags:
+        - Customers
+      summary: Link two accounts into one
+      parameters:
+        - name: customerId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/LinkAccountsRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/LinkAccountsRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/LinkAccountsRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/customers/{customerId}:
+    put:
+      tags:
+        - Customers
+      summary: Update a customer account
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Id
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/UpdateRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/UpdateRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/UpdateRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/customers/forgot-password:
+    post:
+      tags:
+        - Customers
+      summary: Send forgot password email
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/ForgotCredencialsRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/ForgotCredencialsRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/ForgotCredencialsRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/customers/forgot-username:
+    post:
+      tags:
+        - Customers
+      summary: Send forgot username email
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/ForgotCredencialsRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/ForgotCredencialsRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/ForgotCredencialsRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/customers/reset-password:
+    post:
+      tags:
+        - Customers
+      summary: Reset customer password
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/customers/validate-new-customer:
+    get:
+      tags:
+        - Customers
+      summary: Validate information to create a new customer
+      parameters:
+        - name: username
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: email
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateNewCustomerResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateNewCustomerResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateNewCustomerResponse'
+  /api/v1/customers/validate-customer-fields:
+    get:
+      tags:
+        - Customers
+      summary: Validate information to create a new customer
+      parameters:
+        - name: customerFields
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: idPlan
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateNewCustomerResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateNewCustomerResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateNewCustomerResponse'
+  /api/v1/customers/{customerId}/enrollments:
+    get:
+      tags:
+        - Customers
+      summary: Get all customer enrollments
+      parameters:
+        - name: customerId
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponseListResponse'
+  /api/v1/customers/{customerId}/enrollments-to-change-delivery-method:
+    get:
+      tags:
+        - Customers
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponseListResponse'
+  /api/v1/customer-types:
+    get:
+      tags:
+        - CustomerTypes
+      summary: Get a list of customer types
+      parameters:
+        - name: utilitiesIds
+          in: query
+          description: ''
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+        - name: customerTypeId
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: pageNumber
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerTypeResponseListPagedResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerTypeResponseListPagedResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerTypeResponseListPagedResponse'
+  /api/v1/customer-types/{customerTypeId}:
+    get:
+      tags:
+        - CustomerTypes
+      summary: Get By Id
+      parameters:
+        - name: customerTypeId
+          in: path
+          description: Commodity ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerTypeResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerTypeResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerTypeResponse'
+  /api/v1/document-bundles/{planId}:
+    get:
+      tags:
+        - DocumentBundles
+      summary: Get document bundle by document type
+      parameters:
+        - name: planId
+          in: path
+          description: Plan ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: documentType
+          in: query
+          description: ''
+          schema:
+            $ref: '#/components/schemas/DocumentTypes'
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/DocumentBundleResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/DocumentBundleResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/DocumentBundleResponseListResponse'
+  /api/v1/document-bundles/enrollment-documents/{planId}:
+    get:
+      tags:
+        - DocumentBundles
+      summary: Get enrollment documents
+      parameters:
+        - name: planId
+          in: path
+          description: Plan ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: languageId
+          in: query
+          description: Language ID
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentDocumentsResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentDocumentsResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentDocumentsResponseListResponse'
+  /api/v1/document-languages:
+    get:
+      tags:
+        - DocumentLanguages
+      summary: Get languages
+      parameters:
+        - name: onlyActives
+          in: query
+          description: Only Actives
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/DocumentLanguageResponseListPagedResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/DocumentLanguageResponseListPagedResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/DocumentLanguageResponseListPagedResponse'
+  /api/v1/enrollments/{enrollmentId}:
+    get:
+      tags:
+        - Enrollments
+      summary: Get enrollment information by ID
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponse'
+  /api/v1/enrollments/{enrollmentId}/is-renewable:
+    get:
+      tags:
+        - Enrollments
+      summary: Return if a specific enrollment is renewable or not
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/enrollments/{enrollmentId}/winback-process:
+    get:
+      tags:
+        - Enrollments
+      summary: Return winback process by enrollment id
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/enrollments/exists-repeated:
+    get:
+      tags:
+        - Enrollments
+      summary: Check if the enrollment already exist and if it's repeated
+      parameters:
+        - name: ldcNumber
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: idPlan
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ExistAndIsRepeatedResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ExistAndIsRepeatedResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ExistAndIsRepeatedResponse'
+  /api/v1/enrollments/{enrollmentId}/renewal:
+    post:
+      tags:
+        - Enrollments
+      summary: Create a enrollment renewal
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/EnrollmentRenewalRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/EnrollmentRenewalRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/EnrollmentRenewalRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/enrollments/create:
+    post:
+      tags:
+        - Enrollments
+      summary: CreateEnrollment - Create a new enrollment
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/EnrollmentRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/EnrollmentRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/EnrollmentRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CreateEnrollmentResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CreateEnrollmentResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CreateEnrollmentResponse'
+  /api/v1/enrollments/{enrollmentId}/enrollments-from-billing-group:
+    get:
+      tags:
+        - Enrollments
+      parameters:
+        - name: enrollmentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/EnrollmentResponseListResponse'
+  /api/v1/enrollments/{enrollmentId}/drop:
+    post:
+      tags:
+        - Enrollments
+      summary: Generate a drop request for one enrollment
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/DropsManagementRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/DropsManagementRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/DropsManagementRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+  /api/v1/enrollments/{enrollmentId}/transfer-service:
+    post:
+      tags:
+        - Enrollments
+      summary: Generate a transfer of service for a specific enrollment
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/TransferServiceRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/TransferServiceRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/TransferServiceRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/TransferServiceResponseResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/TransferServiceResponseResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/TransferServiceResponseResponse'
+  /api/v1/enrollments/{enrollmentId}/update-billing-delivery-method:
+    post:
+      tags:
+        - Enrollments
+      summary: Update billing delivery method
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/MethodDeliveryRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/MethodDeliveryRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/MethodDeliveryRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+  /api/v1/enrollments/{enrollmentId}/pending-credit-letter:
+    get:
+      tags:
+        - Enrollments
+      summary: Get a pending customer letter of credit by enrollment Id
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerCreditLettersResponseResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerCreditLettersResponseResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerCreditLettersResponseResponse'
+  /api/v1/enrollments/{enrollmentId}/upload-credit-letter:
+    post:
+      tags:
+        - Enrollments
+      summary: Upload a new customer letter of credit
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+            encoding:
+              file:
+                style: form
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerCreditLettersResponseResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerCreditLettersResponseResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CustomerCreditLettersResponseResponse'
+  /api/v1/method-contact/{methodContactId}:
+    get:
+      tags:
+        - MethodContact
+      summary: Get a method of contact by id
+      parameters:
+        - name: methodContactId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/MethodContactResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/MethodContactResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/MethodContactResponse'
+  /api/v1/method-contact:
+    get:
+      tags:
+        - MethodsConsent
+      summary: Get methods consent
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/MethodConsentResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/MethodConsentResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/MethodConsentResponse'
+  /api/v1/miscellaneous/id-name-filter:
+    get:
+      tags:
+        - Miscellaneous
+      summary: Get pair id - name for different models
+      parameters:
+        - name: type
+          in: query
+          description: Model Type
+          schema:
+            $ref: '#/components/schemas/FilterTypes'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MiscellaneousIdNameResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MiscellaneousIdNameResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MiscellaneousIdNameResponse'
+  /api/v1/miscellaneous/esiid-by-address:
+    get:
+      tags:
+        - Miscellaneous
+      summary: Get ESIID by address and zipcode
+      parameters:
+        - name: customerType
+          in: query
+          description: Customer Type
+          schema:
+            $ref: '#/components/schemas/CustomerTypesEnum'
+        - name: address
+          in: query
+          description: Address
+          schema:
+            type: string
+        - name: zipCode
+          in: query
+          description: Zip Code
+          schema:
+            type: string
+        - name: alternativeSearch
+          in: query
+          description: Is Full
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/view_address_esiid'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/view_address_esiid'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/view_address_esiid'
+  /api/v1/miscellaneous/validate-esiid-address:
+    get:
+      tags:
+        - Miscellaneous
+      summary: Validate EsiidAddress
+      parameters:
+        - name: esiidNumber
+          in: query
+          description: Esiid number
+          schema:
+            type: string
+        - name: address
+          in: query
+          description: Address
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateEsiidAddressResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateEsiidAddressResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateEsiidAddressResponse'
+  /api/v1/miscellaneous/validate-address-fields:
+    get:
+      tags:
+        - Miscellaneous
+      summary: Validate Address
+      parameters:
+        - name: address
+          in: query
+          description: 'Address ex: 1111111'
+          schema:
+            type: string
+        - name: planId
+          in: query
+          description: Plan id
+          schema:
+            type: integer
+            format: int32
+        - name: fieldType
+          in: query
+          description: 'Fields type ex: ldc_account_number'
+          schema:
+            $ref: '#/components/schemas/AddressFieldsTypes'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateAddressResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateAddressResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidateAddressResponse'
+  /api/v1/miscellaneous/validate-ssn:
+    get:
+      tags:
+        - Miscellaneous
+      summary: Validate Social Security Number (SSN)
+      parameters:
+        - name: ssn
+          in: query
+          description: Social Security Number
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+  /api/v1/notifications/by-customer/{customerId}:
+    get:
+      tags:
+        - Notifications
+      summary: Get customer notifications
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Id
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: unreadOnly
+          in: query
+          description: Only Unread Notification
+          schema:
+            type: boolean
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/NotificationResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/NotificationResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/NotificationResponseListResponse'
+  /api/v1/notifications/{notificationId}/read:
+    put:
+      tags:
+        - Notifications
+      summary: Make a notification as read
+      parameters:
+        - name: notificationId
+          in: path
+          description: Notification Id
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/NotificationResponseResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/NotificationResponseResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/NotificationResponseResponse'
+  /api/v1/payments/charge-transaction/enrollment/{enrollId}:
+    get:
+      tags:
+        - PaymentChargeTransactions
+      summary: Get charges transaction by enrollment id
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: sentToBillingSystem
+          in: query
+          description: Sent To Billing System
+          schema:
+            type: boolean
+        - name: hasBeenCaptured
+          in: query
+          description: Has Been Captured
+          schema:
+            type: boolean
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentChargeTransactionsResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentChargeTransactionsResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentChargeTransactionsResponse'
+  /api/v1/payments/charge-transaction/{chargeId}:
+    get:
+      tags:
+        - PaymentChargeTransactions
+      summary: Get charge transaction by id
+      parameters:
+        - name: chargeId
+          in: path
+          description: Charge Transaction ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PaymentChargeTransactionsResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PaymentChargeTransactionsResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PaymentChargeTransactionsResponse'
+    put:
+      tags:
+        - PaymentChargeTransactions
+      summary: Update charge transaction by id
+      parameters:
+        - name: chargeId
+          in: path
+          description: Charge transaction ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentChargeTransactionRequestPut'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentChargeTransactionRequestPut'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentChargeTransactionRequestPut'
+      responses:
+        '200':
+          description: Success
+  /api/v1/payments/charge-transaction:
+    post:
+      tags:
+        - PaymentChargeTransactions
+      summary: Create charge transaction
+      parameters:
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentChargeTransactionRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentChargeTransactionRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentChargeTransactionRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/payments/customer-profile/api/{customerId}:
+    get:
+      tags:
+        - PaymentCustomerProfiles
+      summary: Get customer profile by customer id from Authorize API
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentGatewayProfile'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentGatewayProfile'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentGatewayProfile'
+  /api/v1/payments/customer-profile/db:
+    get:
+      tags:
+        - PaymentCustomerProfiles
+      summary: Get customer profile from Database
+      parameters:
+        - name: CustomerProfileBy
+          in: query
+          description: ''
+          schema:
+            $ref: '#/components/schemas/GetCustomerProfileByTypes'
+        - name: CustomerProfileId
+          in: query
+          description: Customer profile ID
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: CustomerProfileToken
+          in: query
+          description: Customer profile Token
+          schema:
+            type: string
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PaymentCustomerProfilesResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PaymentCustomerProfilesResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PaymentCustomerProfilesResponse'
+    post:
+      tags:
+        - PaymentCustomerProfiles
+      summary: Create Customer profile in our database
+      parameters:
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentCustomerProfilesRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentCustomerProfilesRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentCustomerProfilesRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/payments/customer-profile/db/{profileId}:
+    put:
+      tags:
+        - PaymentCustomerProfiles
+      summary: Update Customer profile in our database
+      parameters:
+        - name: profileId
+          in: path
+          description: Customer Profile ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentCustomerProfilesRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentCustomerProfilesRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentCustomerProfilesRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/payments/payment-profile/hosted-profile-page-token/{customerId}:
+    post:
+      tags:
+        - PaymentProfiles
+      summary: Generate iframe for payment methods
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentGetHostedProfilePageTokenRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentGetHostedProfilePageTokenRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentGetHostedProfilePageTokenRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/GetHostedProfilePageTokenResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/GetHostedProfilePageTokenResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/GetHostedProfilePageTokenResponse'
+  /api/v1/payments/payment-profile/db/{profileId}:
+    get:
+      tags:
+        - PaymentProfiles
+      summary: Get a payment profile from our database by profile id
+      parameters:
+        - name: profileId
+          in: path
+          description: Profile ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PaymentProfilesResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PaymentProfilesResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PaymentProfilesResponse'
+  /api/v1/payments/payment-profile/{customerId}:
+    put:
+      tags:
+        - PaymentProfiles
+      summary: Update or Create payment profile from PaymentGateway API
+      parameters:
+        - name: customerId
+          in: path
+          description: Payment Profile Token
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentProfilesRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentProfilesRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentProfilesRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/payments/payment-profile/{paymentProfileToken}:
+    delete:
+      tags:
+        - PaymentProfiles
+      summary: Delete payment profile from our database and in Payment Gateway
+      parameters:
+        - name: paymentProfileToken
+          in: path
+          description: Payment Profile Token
+          required: true
+          schema:
+            type: string
+        - name: customerProfileToken
+          in: query
+          description: Customer Profile Token
+          schema:
+            type: string
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/payments/recurring-billing/enrollment/{enrollmentId}:
+    get:
+      tags:
+        - PaymentRecurringBilling
+      summary: Get recurring billing by enrollment
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/RecurringBillingResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/RecurringBillingResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/RecurringBillingResponse'
+    post:
+      tags:
+        - PaymentRecurringBilling
+      summary: Create a recurring billing for an enrollment
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRecurringBillingRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRecurringBillingRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRecurringBillingRequest'
+      responses:
+        '200':
+          description: Success
+    delete:
+      tags:
+        - PaymentRecurringBilling
+      summary: Mark a recurring billing as finished
+      parameters:
+        - name: enrollmentId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/payments/recurring-billing/customer/{customerId}:
+    post:
+      tags:
+        - PaymentRecurringBilling
+      summary: Create a recurring billing for a customer
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRecurringBillingByCustomerRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRecurringBillingByCustomerRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRecurringBillingByCustomerRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/payments/{enrollId}:
+    post:
+      tags:
+        - Payments
+      summary: Create and inform one time payment
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Transaction id
+  /api/v1/payments/deposit/{enrollId}:
+    post:
+      tags:
+        - Payments
+      summary: Create and inform a deposit payment payment
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Transaction id
+  /api/v1/payments/history/{enrollId}:
+    get:
+      tags:
+        - Payments
+      summary: Get enrollment payment history
+      parameters:
+        - name: enrollId
+          in: path
+          description: Enrollment ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: pageNumber
+          in: query
+          description: Page Number (Nullable)
+          schema:
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          description: Page Size (Nullable)
+          schema:
+            type: integer
+            format: int32
+        - name: X-Customer-Hash
+          in: header
+          required: true
+      responses:
+        '200':
+          description: Transaction id
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentOverviewModel'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentOverviewModel'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentOverviewModel'
+  /api/v1/payments/credit-check-score-detached:
+    get:
+      tags:
+        - Payments
+      summary: Get Credit check score of a customer
+      parameters:
+        - name: firstName
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: lastName
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: streetName
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: streetNum
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: city
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: state
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: zipCode
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: socialSecurityNumber
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: dateOfBirth
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: idCustomer
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CreditCheckResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CreditCheckResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/CreditCheckResponse'
+  /api/v1/payments/redirect-payment-uri/{enrollId}:
+    get:
+      tags:
+        - Payments
+      summary: Get Redirect Payment URI
+      parameters:
+        - name: enrollId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: ldcNumber
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: callbackSuccessURL
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: callbackErrorURL
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: secondsBeforeExpire
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 30
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: string
+            application/json; x-api-version=1.0:
+              schema:
+                type: string
+            text/json; x-api-version=1.0:
+              schema:
+                type: string
+  /api/v1/plan-bundles/for-wizard:
+    get:
+      tags:
+        - PlanBundles
+      summary: Get a list of bundle plans
+      parameters:
+        - name: zipCodeId
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+        - name: electricUtilityId
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+        - name: gasUtilityId
+          in: query
+          description: Only active plans
+          schema:
+            type: integer
+            format: int32
+        - name: customerTypeId
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+        - name: promoCode
+          in: query
+          description: Plans associated to promo code
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanBundleResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanBundleResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanBundleResponse'
+  /api/v1/plans/{planId}:
+    get:
+      tags:
+        - Plans
+      summary: Get full Plan by ID
+      parameters:
+        - name: planId
+          in: path
+          description: Plan ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PlanFullResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PlanFullResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PlanFullResponse'
+  /api/v1/plans/batch-for-wizard:
+    get:
+      tags:
+        - Plans
+      summary: Get a list of plans
+      parameters:
+        - name: ids_utilities
+          in: query
+          description: ''
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+        - name: customer_type
+          in: query
+          description: ''
+          schema:
+            $ref: '#/components/schemas/CustomerTypesEnum'
+        - name: promo_code
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanInBulkResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanInBulkResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanInBulkResponse'
+  /api/v1/plans/for-wizard:
+    get:
+      tags:
+        - Plans
+      summary: Get plans for wizards
+      parameters:
+        - name: ids_utilities
+          in: query
+          description: ''
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+        - name: customer_type
+          in: query
+          description: ''
+          schema:
+            $ref: '#/components/schemas/CustomerTypesEnum'
+        - name: promo_code
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanWizardResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanWizardResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanWizardResponse'
+  /api/v1/plans/docs/{planId}:
+    get:
+      tags:
+        - Plans
+      summary: Get a list of documents for a specific plan
+      parameters:
+        - name: planId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: languageId
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PlanDocsResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PlanDocsResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/PlanDocsResponse'
+  /api/v1/plans/zip-codes/{planId}:
+    get:
+      tags:
+        - Plans
+      summary: Get a list of zip codes for a specific plan
+      parameters:
+        - name: planId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  type: string
+  /api/v1/plans/thank-you-page/{planId}:
+    get:
+      tags:
+        - Plans
+      summary: Get the thank you page for a plan
+      parameters:
+        - name: planId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/HtmlTemplateResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/HtmlTemplateResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/HtmlTemplateResponse'
+  /api/v1/plans/acceptance-options:
+    get:
+      tags:
+        - Plans
+      summary: Get a list of acceptance options
+      parameters:
+        - name: planId
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AcceptanceOptionResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AcceptanceOptionResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AcceptanceOptionResponse'
+  /api/v1/plans/request-customer-fields/{planId}:
+    get:
+      tags:
+        - Plans
+      summary: Get a RequestCustomerFields
+      parameters:
+        - name: planId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatorElement'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatorElement'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatorElement'
+  /api/v1/plans/request-address-fields/{planId}:
+    get:
+      tags:
+        - Plans
+      summary: Get a RequestAddressFields
+      parameters:
+        - name: planId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatorElement'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatorElement'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidatorElement'
+  /api/v1/states:
+    get:
+      tags:
+        - States
+      summary: Get all states
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/StateResponseListResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/StateResponseListResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/StateResponseListResponse'
+  /api/v1/tpv/verification/{verificationId}:
+    put:
+      tags:
+        - TPV
+      summary: Allow TPV to update the enrollment verification status
+      parameters:
+        - name: verificationId
+          in: path
+          description: TPV verification ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: ''
+        content:
+          application/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/UpdateVerificationRequest'
+          text/json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/UpdateVerificationRequest'
+          application/*+json; x-api-version=1.0:
+            schema:
+              $ref: '#/components/schemas/UpdateVerificationRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/utilities:
+    get:
+      tags:
+        - Utilities
+      summary: <summary> Get a list of utilities </summary>
+      parameters:
+        - name: id_utility
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: zipCode
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: id_customer_type
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: active
+          in: query
+          description: ''
+          schema:
+            type: boolean
+        - name: allow_enrollments
+          in: query
+          description: ''
+          schema:
+            type: boolean
+        - name: has_available_plans
+          in: query
+          description: ''
+          schema:
+            type: boolean
+        - name: include_zipcodes
+          in: query
+          description: ''
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UtilityResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UtilityResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UtilityResponse'
+  /api/v1/utilities/utility-information:
+    get:
+      tags:
+        - Utilities
+      summary: Get utility information
+      parameters:
+        - name: utilityId
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/UtilitiesInformation'
+            application/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/UtilitiesInformation'
+            text/json; x-api-version=1.0:
+              schema:
+                $ref: '#/components/schemas/UtilitiesInformation'
+  /api/v1/zipcodes:
+    get:
+      tags:
+        - ZipCodes
+      summary: List of zip codes availables in the system
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ZipCodeResponse'
+            application/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ZipCodeResponse'
+            text/json; x-api-version=1.0:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ZipCodeResponse'
+components:
+  schemas:
+    AcceptanceOptionResponse:
+      type: object
+      properties:
+        id_option:
+          type: integer
+          format: int32
+        text:
+          type: string
+          nullable: true
+        is_required:
+          type: boolean
+      additionalProperties: false
+    AddressFieldsTypes:
+      enum:
+        - ldc_account_number
+      type: string
+      description: Address Fields types
+      format: ''
+    AddressResponse:
+      type: object
+      properties:
+        address_1:
+          type: string
+          nullable: true
+        address_2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        ldc_account:
+          type: string
+          nullable: true
+        correspondence_zip:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ApiErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AuthSuccessResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          nullable: true
+        refreshToken:
+          type: string
+          nullable: true
+        customerSupport:
+          type: string
+          nullable: true
+        roleGroups:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    BillingChargeModel:
+      type: object
+      properties:
+        charge_Date:
+          type: string
+          format: date-time
+          nullable: true
+        begin_Read_Date:
+          type: string
+          format: date-time
+          nullable: true
+        end_Read_Date:
+          type: string
+          format: date-time
+          nullable: true
+        stmt_Date:
+          type: string
+          format: date-time
+          nullable: true
+        type_Desc:
+          type: string
+          nullable: true
+        customer_Charge:
+          type: number
+          format: double
+        energy_Price:
+          type: number
+          format: double
+        tax:
+          type: number
+          format: double
+        total:
+          type: number
+          format: double
+        billed_Usage:
+          type: number
+          format: double
+      additionalProperties: false
+    BillingChargeModelListPagedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingChargeModel'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        pageNumber:
+          type: integer
+          format: int32
+          nullable: true
+        pageSize:
+          type: integer
+          format: int32
+          nullable: true
+        totalPages:
+          type: integer
+          format: int32
+          nullable: true
+        totalRecords:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    BillingSummaryModel:
+      type: object
+      properties:
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        accountNumber:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        totalBalance:
+          type: number
+          format: double
+          nullable: true
+        nextDueDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    BillingSummaryModelResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BillingSummaryModel'
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrandResponse:
+      type: object
+      properties:
+        id_site:
+          type: integer
+          format: int32
+        system_name:
+          type: string
+          nullable: true
+        short_name:
+          type: string
+          nullable: true
+        formal_name:
+          type: string
+          nullable: true
+        branding_name:
+          type: string
+          nullable: true
+        url_base:
+          type: string
+          nullable: true
+        url_rates:
+          type: string
+          nullable: true
+        url_account:
+          type: string
+          nullable: true
+        email_address:
+          type: string
+          nullable: true
+        email_name:
+          type: string
+          nullable: true
+        email_default_subject:
+          type: string
+          nullable: true
+        is_default:
+          type: boolean
+        active:
+          type: boolean
+        phone:
+          type: string
+          nullable: true
+        url_content_manager:
+          type: string
+          nullable: true
+        url_no_service_available_page:
+          type: string
+          nullable: true
+        url_privacy_polices:
+          type: string
+          nullable: true
+        office_hours:
+          type: string
+          nullable: true
+        customer_care_email:
+          type: string
+          nullable: true
+        wizard_welcome_text:
+          type: string
+          nullable: true
+        wizard_redirect_site_text:
+          type: string
+          nullable: true
+        url_report_outage:
+          type: string
+          nullable: true
+        url_contact_us:
+          type: string
+          nullable: true
+        url_faqs:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrandResponseListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrandResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BrandResponseResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BrandResponse'
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CityResponse:
+      type: object
+      properties:
+        id_city:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CityResponseListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CityResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CommodityResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        uoM_text:
+          type: string
+          nullable: true
+        billing_system_commodity_name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ConfigurationParametersResponse:
+      type: object
+      properties:
+        payment_gateway:
+          $ref: '#/components/schemas/PaymentGatewayEnum'
+        available_payment_types_deposits:
+          type: string
+          nullable: true
+        available_payment_types_one_time_payments:
+          type: string
+          nullable: true
+        available_payment_types_recurring_billing:
+          type: string
+          nullable: true
+        my_account_remove_drop_option:
+          type: boolean
+      additionalProperties: false
+    CountyResponse:
+      type: object
+      properties:
+        id_county:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CountyResponseListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountyResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CreateCustomerQuickEnrollmentRequest:
+      type: object
+      properties:
+        callCenterUserName:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        alternativeEmail:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        otherphone:
+          type: string
+          nullable: true
+        methodContact:
+          type: integer
+          format: int32
+        ssn:
+          type: string
+          nullable: true
+        cellNumber:
+          type: string
+          nullable: true
+        faxNum:
+          type: string
+          nullable: true
+        firmName:
+          type: string
+          nullable: true
+        ccNumber:
+          type: string
+          nullable: true
+        employerName:
+          type: string
+          nullable: true
+        driversLicenseStateCode:
+          type: string
+          nullable: true
+        driversLicenseNumber:
+          type: string
+          nullable: true
+        fedTaxIdNum:
+          type: string
+          nullable: true
+        contactName:
+          type: string
+          nullable: true
+        taxExemptionInd:
+          type: integer
+          format: int32
+        customerType:
+          type: integer
+          format: int32
+        planType:
+          type: integer
+          format: int32
+        languageId:
+          type: integer
+          format: int32
+        dateOfBirth:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CreateEnrollmentResponse:
+      type: object
+      properties:
+        enrollmentId:
+          type: integer
+          format: int32
+        enrollmentStatus:
+          type: string
+          nullable: true
+        enrollmentLdc:
+          type: string
+          nullable: true
+        customerId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    CreditCheckResponse:
+      type: object
+      properties:
+        score:
+          type: integer
+          format: int32
+        deposit_required:
+          type: boolean
+        deny_service:
+          type: boolean
+        fraud_alert:
+          type: boolean
+        reason_codes:
+          type: array
+          items: {}
+          nullable: true
+        fraud_alert_codes:
+          type: array
+          items: {}
+          nullable: true
+        id_credit_check:
+          type: integer
+          format: int32
+        no_score_reason:
+          type: string
+          nullable: true
+        error_msg:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CustomerAuthSuccessResponse:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int32
+        customerHash:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CustomerAuthSuccessResponseResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CustomerAuthSuccessResponse'
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CustomerCreditLettersResponse:
+      type: object
+      properties:
+        id_customer_credit_letters:
+          type: integer
+          format: int32
+        id_status:
+          type: integer
+          format: int32
+        file_name:
+          type: string
+          nullable: true
+        id_enrollment:
+          type: integer
+          format: int32
+          nullable: true
+        url:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CustomerCreditLettersResponseResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CustomerCreditLettersResponse'
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CustomerResponse:
+      type: object
+      properties:
+        id_customer:
+          type: integer
+          format: int32
+        user_name:
+          type: string
+          nullable: true
+        first_name:
+          type: string
+          nullable: true
+        last_name:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        active:
+          type: boolean
+        email:
+          type: string
+          nullable: true
+        send_to_main_email:
+          type: boolean
+        send_to_secondary_email:
+          type: boolean
+        alternative_email:
+          type: string
+          nullable: true
+        ssn:
+          type: string
+          nullable: true
+        cell_number:
+          type: string
+          nullable: true
+        employer_name:
+          type: string
+          nullable: true
+        drivers_license_number:
+          type: string
+          nullable: true
+        drivers_license_state_code:
+          type: string
+          nullable: true
+        fax_num:
+          type: string
+          nullable: true
+        firm_name:
+          type: string
+          nullable: true
+        contact_name:
+          type: string
+          nullable: true
+        customer_name:
+          type: string
+          nullable: true
+        business_name:
+          type: string
+          nullable: true
+        other_phone:
+          type: string
+          nullable: true
+        id_primary_phone_type:
+          type: integer
+          format: int32
+          nullable: true
+        id_other_phone_type:
+          type: integer
+          format: int32
+          nullable: true
+        id_prefered_language:
+          type: integer
+          format: int32
+        opted_marketing_coms:
+          type: boolean
+        disabled_bank_accounts_date:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    CustomerResponseResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CustomerResponse'
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CustomerTypeResponse:
+      type: object
+      properties:
+        id_customer_type:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        image:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        ssn_required:
+          type: boolean
+        fedtaxidnum_required:
+          type: boolean
+        cellnumber_required:
+          type: boolean
+        primary_phone_required:
+          type: boolean
+        contactname_required:
+          type: boolean
+        employer_name_required:
+          type: boolean
+        drivers_license_number_required:
+          type: boolean
+        drivers_license_state_code_required:
+          type: boolean
+        fax_num_required:
+          type: boolean
+        first_name_required:
+          type: boolean
+        last_name_required:
+          type: boolean
+        firm_name_required:
+          type: boolean
+        alternative_email_required:
+          type: boolean
+          nullable: true
+        default_value:
+          type: string
+          nullable: true
+        billing_system_name:
+          type: string
+          nullable: true
+        otherphone_required:
+          type: boolean
+        date_of_birth_required:
+          type: boolean
+        recurring_billing_required:
+          type: boolean
+        send_etf_value:
+          type: boolean
+      additionalProperties: false
+    CustomerTypeResponseListPagedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerTypeResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        pageNumber:
+          type: integer
+          format: int32
+          nullable: true
+        pageSize:
+          type: integer
+          format: int32
+          nullable: true
+        totalPages:
+          type: integer
+          format: int32
+          nullable: true
+        totalRecords:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    CustomerTypesEnum:
+      enum:
+        - Residential
+        - SmallBusiness
+        - LargeBusiness
+      type: string
+      format: ''
+    DocumentBundleResponse:
+      type: object
+      properties:
+        id_document_bundle:
+          type: integer
+          format: int32
+        id_document_type:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        display_name:
+          type: string
+          nullable: true
+        version:
+          type: number
+          format: double
+        id_previous_bundle:
+          type: integer
+          format: int32
+          nullable: true
+        version_comment:
+          type: string
+          nullable: true
+        date_created:
+          type: string
+          format: date-time
+          nullable: true
+        documents_bundles_document:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentsBundleDocumentResponse'
+          nullable: true
+      additionalProperties: false
+    DocumentBundleResponseListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentBundleResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DocumentLanguageResponse:
+      type: object
+      properties:
+        id_language:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        short_name:
+          type: string
+          nullable: true
+        is_default:
+          type: boolean
+        active:
+          type: boolean
+      additionalProperties: false
+    DocumentLanguageResponseListPagedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentLanguageResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        pageNumber:
+          type: integer
+          format: int32
+          nullable: true
+        pageSize:
+          type: integer
+          format: int32
+          nullable: true
+        totalPages:
+          type: integer
+          format: int32
+          nullable: true
+        totalRecords:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    DocumentResponse:
+      type: object
+      properties:
+        description:
+          type: string
+          nullable: true
+        path:
+          type: string
+          nullable: true
+        download_name:
+          type: string
+          nullable: true
+        display_name:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        display_in_plan_listing:
+          type: boolean
+        display_in_summary:
+          type: boolean
+        display_in_thank_you_page:
+          type: boolean
+      additionalProperties: false
+    DocumentTypes:
+      enum:
+        - DisplayDocuments
+        - DisplayInheritedDocuments
+        - DisplayMyAccountDocuments
+      type: string
+      description: Document Types
+      format: ''
+    DocumentsBundleDocumentResponse:
+      type: object
+      properties:
+        id_document:
+          type: integer
+          format: int32
+        id_document_bundle:
+          type: integer
+          format: int32
+        default_doc:
+          type: boolean
+        documents:
+          $ref: '#/components/schemas/DocumentResponse'
+      additionalProperties: false
+    DropsManagementRequest:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          nullable: true
+        reasonCodeId:
+          type: integer
+          format: int32
+        removeMeter:
+          type: boolean
+      additionalProperties: false
+    EnrollmentAddress:
+      type: object
+      properties:
+        address:
+          type: string
+          nullable: true
+        address2:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        county:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        zipcode:
+          type: string
+          nullable: true
+        ldcAccount:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EnrollmentCustomer:
+      type: object
+      properties:
+        idCustomer:
+          type: integer
+          format: int32
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        firmName:
+          type: string
+          nullable: true
+        contactName:
+          type: string
+          nullable: true
+        employerName:
+          type: string
+          nullable: true
+        faxNum:
+          type: string
+          nullable: true
+        fedtaxid:
+          type: string
+          nullable: true
+        driversLicenseNumber:
+          type: string
+          nullable: true
+        driversLicenseStateCode:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        alternativeEmail:
+          type: string
+          nullable: true
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        primaryPhoneNumber:
+          type: string
+          nullable: true
+        primaryPhoneType:
+          type: string
+          nullable: true
+        otherPhoneNumber:
+          type: string
+          nullable: true
+        otherPhoneType:
+          type: string
+          nullable: true
+        languageId:
+          type: integer
+          format: int32
+        preferedContact:
+          type: string
+          nullable: true
+        confirmationCode:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          nullable: true
+        suscribeMarketingComms:
+          type: boolean
+      additionalProperties: false
+    EnrollmentDocumentsResponse:
+      type: object
+      properties:
+        description:
+          type: string
+          nullable: true
+        path:
+          type: string
+          nullable: true
+        download_name:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EnrollmentDocumentsResponseListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnrollmentDocumentsResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EnrollmentPayment:
+      type: object
+      properties:
+        bypassCreditCheck:
+          type: boolean
+          nullable: true
+        creditCheckId:
+          type: integer
+          format: int32
+        acceptRecurringBilling:
+          type: boolean
+          nullable: true
+        depositOptions:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EnrollmentRenewalCustomer:
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        firmName:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+          nullable: true
+        fedtaxid:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EnrollmentRenewalRequest:
+      type: object
+      properties:
+        planId:
+          type: integer
+          format: int32
+        winbackProcess:
+          type: string
+          nullable: true
+        billingDeliveryMethod:
+          type: string
+          nullable: true
+        requestedStartDate:
+          type: string
+          nullable: true
+        agreedAcceptanceValues:
+          type: string
+          nullable: true
+        billingAddress:
+          $ref: '#/components/schemas/EnrollmentAddress'
+        customer:
+          $ref: '#/components/schemas/EnrollmentRenewalCustomer'
+      additionalProperties: false
+    EnrollmentRequest:
+      type: object
+      properties:
+        planId:
+          type: integer
+          format: int32
+        commodityName:
+          type: string
+          nullable: true
+        customerType:
+          type: string
+          nullable: true
+        switchType:
+          type: string
+          nullable: true
+        priority:
+          type: string
+          nullable: true
+        requestedStartDate:
+          type: string
+          nullable: true
+        nameKey:
+          type: string
+          nullable: true
+        agreedAcceptanceValues:
+          type: string
+          nullable: true
+        billingDeliveryMethod:
+          type: string
+          nullable: true
+        criticalCareResidentialCustomer:
+          type: boolean
+        serviceAddress:
+          $ref: '#/components/schemas/EnrollmentAddress'
+        billingAddress:
+          $ref: '#/components/schemas/EnrollmentAddress'
+        customer:
+          $ref: '#/components/schemas/EnrollmentCustomer'
+        payment:
+          $ref: '#/components/schemas/EnrollmentPayment'
+      additionalProperties: false
+    EnrollmentResponse:
+      type: object
+      properties:
+        id_enrollment:
+          type: integer
+          format: int32
+        id_plan:
+          type: integer
+          format: int32
+          nullable: true
+        id_status:
+          type: integer
+          format: int32
+        contract_start_date:
+          type: string
+          format: date-time
+          nullable: true
+        contract_end_date:
+          type: string
+          format: date-time
+          nullable: true
+        isRenewable:
+          type: boolean
+        winbackProcess:
+          type: string
+          nullable: true
+        showRenewable:
+          type: string
+          nullable: true
+        showReEnroll:
+          type: string
+          nullable: true
+        showReinstatement:
+          type: string
+          nullable: true
+        pendingDepositAmount:
+          type: number
+          format: double
+        showPaymentDeposit:
+          type: boolean
+        canMakePayments:
+          type: boolean
+        showPayments:
+          type: boolean
+        isActive:
+          type: boolean
+        id_method_delivery:
+          type: integer
+          format: int32
+          nullable: true
+        plans:
+          $ref: '#/components/schemas/PlanEnrollmentResponse'
+        service_address:
+          $ref: '#/components/schemas/AddressResponse'
+        billing_address:
+          $ref: '#/components/schemas/AddressResponse'
+        enrollment_statuses:
+          $ref: '#/components/schemas/EnrollmentStatusResponse'
+      additionalProperties: false
+    EnrollmentResponseListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnrollmentResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EnrollmentStatusResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        status_for_customers:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ExistAndIsRepeatedResponse:
+      type: object
+      properties:
+        data:
+          type: integer
+          format: int32
+        id_previous_enrollment:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    FilterTypes:
+      enum:
+        - State
+        - County
+        - City
+      type: string
+      description: Filter types
+      format: ''
+    ForgotCredencialsRequest:
+      type: object
+      properties:
+        brandId:
+          type: integer
+          format: int32
+        username:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+      additionalProperties: false
+    GetCustomerProfileByTypes:
+      enum:
+        - ByCustomerProfileToken
+        - ByCustomerProfileId
+      type: string
+      description: Different types to retrieve customer profiles
+      format: ''
+    GetHostedProfilePageTokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          nullable: true
+        addUrl:
+          type: string
+          nullable: true
+        editUrl:
+          type: string
+          nullable: true
+      additionalProperties: false
+    HtmlTemplateResponse:
+      type: object
+      properties:
+        id_temporary:
+          type: integer
+          format: int32
+        temporary_description:
+          type: string
+          nullable: true
+        html_code:
+          type: string
+          nullable: true
+        path:
+          type: string
+          nullable: true
+        use_in_editor:
+          type: boolean
+        use_as_thankyou_page:
+          type: boolean
+        id_document_type:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    LinkAccountsRequest:
+      type: object
+      properties:
+        oldUsername:
+          type: string
+          nullable: true
+        oldPassword:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MarketResponse:
+      type: object
+      properties:
+        id_market:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        active:
+          type: boolean
+        state:
+          type: integer
+          format: int32
+        handle_payments:
+          type: boolean
+      additionalProperties: false
+    MessageResponse:
+      type: object
+      properties:
+        id_message:
+          type: integer
+          format: int32
+        id_message_type:
+          type: integer
+          format: int32
+          nullable: true
+        subject:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        display_priority:
+          type: integer
+          format: int32
+          nullable: true
+        id_package:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    MethodConsentResponse:
+      type: object
+      properties:
+        id_method_consent:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MethodContactResponse:
+      type: object
+      properties:
+        id_method_contact:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: true
+        need_auth:
+          type: boolean
+        text_auth:
+          type: string
+          nullable: true
+        label_auth:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MethodDeliveryRequest:
+      type: object
+      properties:
+        id_method_delivery:
+          type: integer
+          format: int32
+      additionalProperties: false
+    MethodDeliveryResponse:
+      type: object
+      properties:
+        id_method_delivery:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MiscellaneousIdNameResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NotificationResponse:
+      type: object
+      properties:
+        id_notification:
+          type: integer
+          format: int32
+        id_customer:
+          type: integer
+          format: int32
+        id_message:
+          type: integer
+          format: int32
+        sent_date:
+          type: string
+          format: date-time
+        read_date:
+          type: string
+          format: date-time
+          nullable: true
+        id_sender:
+          type: integer
+          format: int32
+          nullable: true
+        messages:
+          $ref: '#/components/schemas/MessageResponse'
+      additionalProperties: false
+    NotificationResponseListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NotificationResponseResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/NotificationResponse'
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PaymentChargeTransactionRequest:
+      type: object
+      properties:
+        id_charge_transaction:
+          type: string
+          nullable: true
+        id_payment_profile:
+          type: integer
+          format: int32
+        payment_type:
+          type: integer
+          format: int32
+        id_enrollment:
+          type: integer
+          format: int32
+          nullable: true
+        sent_to_billing_system:
+          type: boolean
+      additionalProperties: false
+    PaymentChargeTransactionRequestPut:
+      type: object
+      properties:
+        id_charge_transaction:
+          type: string
+          nullable: true
+        id_payment_profile:
+          type: integer
+          format: int32
+          nullable: true
+        payment_type:
+          type: integer
+          format: int32
+          nullable: true
+        id_enrollment:
+          type: integer
+          format: int32
+          nullable: true
+        sent_to_billing_system:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    PaymentChargeTransactionsResponse:
+      type: object
+      properties:
+        id_payment_charge_transactions:
+          type: integer
+          format: int32
+        id_charge_transaction:
+          type: string
+          nullable: true
+        id_payment_profile:
+          type: integer
+          format: int32
+        payment_type:
+          type: integer
+          format: int32
+        id_enrollment:
+          type: integer
+          format: int32
+          nullable: true
+        has_been_captured:
+          type: boolean
+        amount:
+          type: number
+          format: double
+          nullable: true
+        date_created:
+          type: string
+          format: date-time
+          nullable: true
+        sent_to_billing_system:
+          type: boolean
+      additionalProperties: false
+    PaymentCustomerProfilesRequest:
+      type: object
+      properties:
+        customer_profile_token:
+          type: string
+          nullable: true
+        id_customer:
+          type: integer
+          format: int32
+          nullable: true
+        sent_to_billing_system:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    PaymentCustomerProfilesResponse:
+      type: object
+      properties:
+        id_payment_customer_profile:
+          type: integer
+          format: int32
+        payment_gateway:
+          type: integer
+          format: int32
+        customer_profile_token:
+          type: string
+          nullable: true
+        id_customer:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    PaymentGatewayEnum:
+      enum:
+        - AuthorizeNET
+        - iCheckGateway
+      type: string
+      format: ''
+    PaymentGatewayProfile:
+      type: object
+      properties:
+        customerProfileToken:
+          type: string
+          nullable: true
+        paymentProfileToken:
+          type: string
+          nullable: true
+        cardType:
+          type: string
+          nullable: true
+        cardNumber:
+          type: string
+          nullable: true
+        cardExpirationDate:
+          type: string
+          nullable: true
+        paymentTypeId:
+          type: integer
+          format: int32
+        routingNumber:
+          type: string
+          nullable: true
+        accountNumber:
+          type: string
+          nullable: true
+        accountType:
+          type: string
+          nullable: true
+        autoPayMethod:
+          type: boolean
+      additionalProperties: false
+    PaymentGetHostedProfilePageTokenRequest:
+      type: object
+      properties:
+        iFrameCommunicatorUrl:
+          type: string
+          nullable: true
+        saveButtonText:
+          type: string
+          nullable: true
+        transactionType:
+          $ref: '#/components/schemas/TransactionTypeEnum'
+        paymentType:
+          $ref: '#/components/schemas/PaymentTypeEnum'
+      additionalProperties: false
+    PaymentOverviewModel:
+      type: object
+      properties:
+        paidDate:
+          type: string
+          format: date-time
+        accountNum:
+          type: string
+          nullable: true
+        depositDate:
+          type: string
+          format: date-time
+          nullable: true
+        payMethodDesc:
+          type: string
+          nullable: true
+        directionDesc:
+          type: string
+          nullable: true
+        returnReasonDesc:
+          type: string
+          nullable: true
+        paidAmount:
+          type: number
+          format: double
+      additionalProperties: false
+    PaymentProfilesRequest:
+      type: object
+      properties:
+        id_payment_customer_profile:
+          type: integer
+          format: int32
+          nullable: true
+        payment_profile_token:
+          type: string
+          nullable: true
+        card_type:
+          type: string
+          nullable: true
+        card_number:
+          type: string
+          nullable: true
+        card_expiration_date:
+          type: string
+          nullable: true
+        sent_to_billing_system:
+          type: boolean
+          nullable: true
+        id_payment_type:
+          type: integer
+          format: int32
+          nullable: true
+        routing_number:
+          type: string
+          nullable: true
+        account_number:
+          type: string
+          nullable: true
+        account_type:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PaymentProfilesResponse:
+      type: object
+      properties:
+        id_payment_profile:
+          type: integer
+          format: int32
+        id_payment_customer_profile:
+          type: integer
+          format: int32
+        payment_profile_token:
+          type: string
+          nullable: true
+        card_type:
+          type: string
+          nullable: true
+        card_number:
+          type: string
+          nullable: true
+        card_expiration_date:
+          type: string
+          nullable: true
+        id_payment_type:
+          type: integer
+          format: int32
+        routing_number:
+          type: string
+          nullable: true
+        account_number:
+          type: string
+          nullable: true
+        account_type:
+          type: string
+          nullable: true
+        date_deleted:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    PaymentRecurringBillingByCustomerRequest:
+      type: object
+      properties:
+        customer_profile_token:
+          type: string
+          nullable: true
+        payment_profile_token:
+          type: string
+          nullable: true
+        enrollment_id:
+          type: integer
+          format: int32
+        date_from:
+          type: string
+          format: date-time
+      additionalProperties: false
+    PaymentRecurringBillingRequest:
+      type: object
+      properties:
+        customer_profile_token:
+          type: string
+          nullable: true
+        payment_profile_token:
+          type: string
+          nullable: true
+        date_from:
+          type: string
+          format: date-time
+      additionalProperties: false
+    PaymentRequest:
+      type: object
+      properties:
+        customerProfileToken:
+          type: string
+          nullable: true
+        paymentProfileToken:
+          type: string
+          nullable: true
+        amount:
+          type: number
+          format: double
+      additionalProperties: false
+    PaymentTypeEnum:
+      enum:
+        - Both
+        - CreditCard
+        - BankAccount
+      type: string
+      format: ''
+    PlanBundleResponse:
+      type: object
+      properties:
+        id_bundle:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        id_electric_plan:
+          type: integer
+          format: int32
+        id_gas_plan:
+          type: integer
+          format: int32
+        id_customer_type:
+          type: integer
+          format: int32
+        id_market:
+          type: integer
+          format: int32
+      additionalProperties: false
+    PlanDocsResponse:
+      type: object
+      properties:
+        plan_id:
+          type: integer
+          format: int32
+        plan_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          nullable: true
+        market_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          nullable: true
+      additionalProperties: false
+    PlanEnrollmentResponse:
+      type: object
+      properties:
+        id_plan:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        id_plan_type:
+          type: integer
+          format: int32
+        rate:
+          type: number
+          format: double
+        monthly_fee:
+          type: number
+          format: double
+        cancellation_fee:
+          type: number
+          format: double
+        available_from_date:
+          type: string
+          format: date-time
+          nullable: true
+        available_until_date:
+          type: string
+          format: date-time
+          nullable: true
+        recurring_billing_required:
+          type: boolean
+        min_start_date_delay_days:
+          type: integer
+          format: int32
+        customer_type:
+          $ref: '#/components/schemas/CustomerTypesEnum'
+        commodities:
+          $ref: '#/components/schemas/CommodityResponse'
+        plan_types:
+          $ref: '#/components/schemas/PlanTypeResponse'
+        utilities:
+          $ref: '#/components/schemas/UtilityResponse'
+        terms:
+          $ref: '#/components/schemas/TermResponse'
+      additionalProperties: false
+    PlanFullResponse:
+      type: object
+      properties:
+        id_plan:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        published:
+          type: boolean
+        id_utility:
+          type: integer
+          format: int32
+        id_customer_type:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: true
+        id_term:
+          type: integer
+          format: int32
+        id_plan_type:
+          type: integer
+          format: int32
+        rate:
+          type: number
+          format: double
+        monthly_fee:
+          type: number
+          format: double
+        cancellation_fee:
+          type: number
+          format: double
+        risk_free_trial_period:
+          type: integer
+          format: int32
+        date_created:
+          type: string
+          format: date-time
+        date_last_modified:
+          type: string
+          format: date-time
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        available_from_date:
+          type: string
+          format: date-time
+          nullable: true
+        available_until_date:
+          type: string
+          format: date-time
+          nullable: true
+        early_termination_text:
+          type: string
+          nullable: true
+        autopay_required:
+          type: boolean
+        id_commodity:
+          type: integer
+          format: int32
+        info_text:
+          type: string
+          nullable: true
+        promo_code:
+          type: string
+          nullable: true
+        billing_system_plan_code:
+          type: string
+          nullable: true
+        credit_score_num_required:
+          type: boolean
+        id_billing_type:
+          type: integer
+          format: int32
+        documents_intro:
+          type: string
+          nullable: true
+        id_version_parent_plan:
+          type: integer
+          format: int32
+          nullable: true
+        deprecated:
+          type: boolean
+        has_been_ever_published:
+          type: boolean
+        version:
+          type: number
+          format: double
+        versioning_trigger:
+          type: string
+          nullable: true
+        id_affiliate:
+          type: integer
+          format: int32
+          nullable: true
+        id_affilliate_parent_plan:
+          type: integer
+          format: int32
+          nullable: true
+        is_affiliate_plan:
+          type: boolean
+        locked:
+          type: boolean
+        min_credit_score:
+          type: integer
+          format: int32
+          nullable: true
+        sent_to_storage:
+          type: boolean
+        id_plan_scope:
+          type: integer
+          format: int32
+        completed:
+          type: boolean
+        not_send_rate:
+          type: boolean
+        not_send_monthly_fee:
+          type: boolean
+        plan_image:
+          type: string
+          nullable: true
+        plan_url_video:
+          type: string
+          nullable: true
+        is_Discount_Plan:
+          type: boolean
+        is_ncc_plan:
+          type: boolean
+        id_ncc_master_plan:
+          type: integer
+          format: int32
+          nullable: true
+        default_pricing_plan_desc:
+          type: string
+          nullable: true
+        highlight:
+          type: string
+          nullable: true
+        plan_icon:
+          type: string
+          nullable: true
+        bundle_rate:
+          type: number
+          format: double
+          nullable: true
+        is_able_to_bundle:
+          type: boolean
+        billing_system_bundle_plan_code:
+          type: string
+          nullable: true
+        is_recommended:
+          type: boolean
+        not_able_renewals:
+          type: boolean
+        yes_etf_text:
+          type: string
+          nullable: true
+        no_etf_text:
+          type: string
+          nullable: true
+        id_market_inherit_doc_group:
+          type: integer
+          format: int32
+        id_cancellation_fee_type:
+          type: integer
+          format: int32
+        id_rate_code:
+          type: integer
+          format: int32
+          nullable: true
+        id_html_thankyou_page:
+          type: integer
+          format: int32
+          nullable: true
+        active:
+          type: boolean
+        generates_quote_request:
+          type: boolean
+        id_autorenewable_plan:
+          type: integer
+          format: int32
+          nullable: true
+        marketer_id:
+          type: integer
+          format: int32
+          nullable: true
+        id_default_plan:
+          type: integer
+          format: int32
+          nullable: true
+        commission:
+          type: string
+          nullable: true
+        sent_contract_dates:
+          type: boolean
+        traunch_calculation_type:
+          type: boolean
+        not_able_reenrolls:
+          type: boolean
+        recurring_billing_required:
+          type: boolean
+        min_start_date_delay_days:
+          type: integer
+          format: int32
+        term:
+          type: integer
+          format: int32
+          nullable: true
+        terms_text:
+          type: string
+          nullable: true
+        customer_type:
+          type: string
+          nullable: true
+        commodity_name:
+          type: string
+          nullable: true
+        commodity_image:
+          type: string
+          nullable: true
+        commodity_color:
+          type: string
+          nullable: true
+        commodity_priority:
+          type: integer
+          format: int32
+          nullable: true
+        commodity_font_color:
+          type: string
+          nullable: true
+        commodity_clean_per:
+          type: string
+          nullable: true
+        commodity_clean_name:
+          type: string
+          nullable: true
+        uom_text:
+          type: string
+          nullable: true
+        renewable_percent:
+          type: number
+          format: double
+        billing_system_commodity_name:
+          type: string
+          nullable: true
+        rate_type:
+          type: string
+          nullable: true
+        rate_type_priority:
+          type: integer
+          format: int32
+          nullable: true
+        rate_required:
+          type: boolean
+        show_rates_variable_plans:
+          type: boolean
+        show_multiple_rates:
+          type: boolean
+        rate500:
+          type: number
+          format: double
+        rate1000:
+          type: number
+          format: double
+        rate2000:
+          type: number
+          format: double
+        handle_payments:
+          type: boolean
+        show_traunch_dollars:
+          type: boolean
+        decimal_places_to_show:
+          type: integer
+          format: int32
+        divide_montly_fee_by:
+          type: integer
+          format: int32
+        present_divided_monthly_fee:
+          type: boolean
+        plan_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          nullable: true
+        market_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          nullable: true
+        acceptance_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/AcceptanceOptionResponse'
+          nullable: true
+        general_rules:
+          $ref: '#/components/schemas/PlanGeneralRules'
+        customer_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidatorElement'
+          nullable: true
+      additionalProperties: false
+    PlanGeneralRules:
+      type: object
+      properties:
+        ldc_account_number:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidatorElement'
+          nullable: true
+        show_critical_care:
+          type: boolean
+        required_credit_check:
+          type: boolean
+        required_deposit_fee:
+          type: string
+          nullable: true
+        deposit_required_under_score:
+          type: string
+          nullable: true
+        deposit_deny_service_under_score:
+          type: string
+          nullable: true
+        allow_bypass_credit_check:
+          type: boolean
+        allow_use_date_of_birth:
+          type: boolean
+      additionalProperties: false
+    PlanInBulkResponse:
+      type: object
+      properties:
+        id_plan:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        published:
+          type: boolean
+        id_utility:
+          type: integer
+          format: int32
+        id_customer_type:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: true
+        id_term:
+          type: integer
+          format: int32
+        id_plan_type:
+          type: integer
+          format: int32
+        rate:
+          type: number
+          format: double
+        monthly_fee:
+          type: number
+          format: double
+        cancellation_fee:
+          type: number
+          format: double
+        risk_free_trial_period:
+          type: integer
+          format: int32
+        date_created:
+          type: string
+          format: date-time
+        date_last_modified:
+          type: string
+          format: date-time
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        available_from_date:
+          type: string
+          format: date-time
+          nullable: true
+        available_until_date:
+          type: string
+          format: date-time
+          nullable: true
+        early_termination_text:
+          type: string
+          nullable: true
+        autopay_required:
+          type: boolean
+        id_commodity:
+          type: integer
+          format: int32
+        info_text:
+          type: string
+          nullable: true
+        promo_code:
+          type: string
+          nullable: true
+        billing_system_plan_code:
+          type: string
+          nullable: true
+        credit_score_num_required:
+          type: boolean
+        id_billing_type:
+          type: integer
+          format: int32
+        documents_intro:
+          type: string
+          nullable: true
+        id_version_parent_plan:
+          type: integer
+          format: int32
+          nullable: true
+        deprecated:
+          type: boolean
+        has_been_ever_published:
+          type: boolean
+        version:
+          type: number
+          format: double
+        versioning_trigger:
+          type: string
+          nullable: true
+        id_affiliate:
+          type: integer
+          format: int32
+          nullable: true
+        id_affilliate_parent_plan:
+          type: integer
+          format: int32
+          nullable: true
+        is_affiliate_plan:
+          type: boolean
+        locked:
+          type: boolean
+        min_credit_score:
+          type: integer
+          format: int32
+          nullable: true
+        sent_to_storage:
+          type: boolean
+        id_plan_scope:
+          type: integer
+          format: int32
+        completed:
+          type: boolean
+        not_send_rate:
+          type: boolean
+        not_send_monthly_fee:
+          type: boolean
+        plan_image:
+          type: string
+          nullable: true
+        plan_url_video:
+          type: string
+          nullable: true
+        is_Discount_Plan:
+          type: boolean
+        is_ncc_plan:
+          type: boolean
+        id_ncc_master_plan:
+          type: integer
+          format: int32
+          nullable: true
+        default_pricing_plan_desc:
+          type: string
+          nullable: true
+        highlight:
+          type: string
+          nullable: true
+        plan_icon:
+          type: string
+          nullable: true
+        bundle_rate:
+          type: number
+          format: double
+          nullable: true
+        is_able_to_bundle:
+          type: boolean
+        billing_system_bundle_plan_code:
+          type: string
+          nullable: true
+        is_recommended:
+          type: boolean
+        not_able_renewals:
+          type: boolean
+        yes_etf_text:
+          type: string
+          nullable: true
+        no_etf_text:
+          type: string
+          nullable: true
+        id_market_inherit_doc_group:
+          type: integer
+          format: int32
+        id_cancellation_fee_type:
+          type: integer
+          format: int32
+        id_rate_code:
+          type: integer
+          format: int32
+          nullable: true
+        id_html_thankyou_page:
+          type: integer
+          format: int32
+          nullable: true
+        active:
+          type: boolean
+        generates_quote_request:
+          type: boolean
+        id_autorenewable_plan:
+          type: integer
+          format: int32
+          nullable: true
+        marketer_id:
+          type: integer
+          format: int32
+          nullable: true
+        id_default_plan:
+          type: integer
+          format: int32
+          nullable: true
+        commission:
+          type: string
+          nullable: true
+        sent_contract_dates:
+          type: boolean
+        traunch_calculation_type:
+          type: boolean
+        not_able_reenrolls:
+          type: boolean
+        recurring_billing_required:
+          type: boolean
+        min_start_date_delay_days:
+          type: integer
+          format: int32
+        term:
+          type: integer
+          format: int32
+          nullable: true
+        terms_text:
+          type: string
+          nullable: true
+        customer_type:
+          type: string
+          nullable: true
+        commodity_name:
+          type: string
+          nullable: true
+        commodity_image:
+          type: string
+          nullable: true
+        commodity_color:
+          type: string
+          nullable: true
+        commodity_priority:
+          type: integer
+          format: int32
+          nullable: true
+        commodity_font_color:
+          type: string
+          nullable: true
+        commodity_clean_per:
+          type: string
+          nullable: true
+        commodity_clean_name:
+          type: string
+          nullable: true
+        uom_text:
+          type: string
+          nullable: true
+        renewable_percent:
+          type: number
+          format: double
+        billing_system_commodity_name:
+          type: string
+          nullable: true
+        rate_type:
+          type: string
+          nullable: true
+        rate_type_priority:
+          type: integer
+          format: int32
+          nullable: true
+        rate_required:
+          type: boolean
+        show_rates_variable_plans:
+          type: boolean
+        show_multiple_rates:
+          type: boolean
+        rate500:
+          type: number
+          format: double
+        rate1000:
+          type: number
+          format: double
+        rate2000:
+          type: number
+          format: double
+        handle_payments:
+          type: boolean
+        show_traunch_dollars:
+          type: boolean
+        decimal_places_to_show:
+          type: integer
+          format: int32
+        divide_montly_fee_by:
+          type: integer
+          format: int32
+        present_divided_monthly_fee:
+          type: boolean
+        plan_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          nullable: true
+        market_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          nullable: true
+        acceptance_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/AcceptanceOptionResponse'
+          nullable: true
+        utility_billing_system_name:
+          type: string
+          nullable: true
+        utility_code:
+          type: string
+          nullable: true
+        customer_type_billing_system_name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PlanTypeResponse:
+      type: object
+      properties:
+        id_plan_type:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+        rate_required:
+          type: boolean
+        display_priority:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    PlanWizardResponse:
+      type: object
+      properties:
+        id_plan:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        published:
+          type: boolean
+        id_utility:
+          type: integer
+          format: int32
+        id_customer_type:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: true
+        id_term:
+          type: integer
+          format: int32
+        id_plan_type:
+          type: integer
+          format: int32
+        rate:
+          type: number
+          format: double
+        monthly_fee:
+          type: number
+          format: double
+        cancellation_fee:
+          type: number
+          format: double
+        risk_free_trial_period:
+          type: integer
+          format: int32
+        date_created:
+          type: string
+          format: date-time
+        date_last_modified:
+          type: string
+          format: date-time
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        available_from_date:
+          type: string
+          format: date-time
+          nullable: true
+        available_until_date:
+          type: string
+          format: date-time
+          nullable: true
+        early_termination_text:
+          type: string
+          nullable: true
+        autopay_required:
+          type: boolean
+        id_commodity:
+          type: integer
+          format: int32
+        info_text:
+          type: string
+          nullable: true
+        promo_code:
+          type: string
+          nullable: true
+        billing_system_plan_code:
+          type: string
+          nullable: true
+        credit_score_num_required:
+          type: boolean
+        id_billing_type:
+          type: integer
+          format: int32
+        documents_intro:
+          type: string
+          nullable: true
+        id_version_parent_plan:
+          type: integer
+          format: int32
+          nullable: true
+        deprecated:
+          type: boolean
+        has_been_ever_published:
+          type: boolean
+        version:
+          type: number
+          format: double
+        versioning_trigger:
+          type: string
+          nullable: true
+        id_affiliate:
+          type: integer
+          format: int32
+          nullable: true
+        id_affilliate_parent_plan:
+          type: integer
+          format: int32
+          nullable: true
+        is_affiliate_plan:
+          type: boolean
+        locked:
+          type: boolean
+        min_credit_score:
+          type: integer
+          format: int32
+          nullable: true
+        sent_to_storage:
+          type: boolean
+        id_plan_scope:
+          type: integer
+          format: int32
+        completed:
+          type: boolean
+        not_send_rate:
+          type: boolean
+        not_send_monthly_fee:
+          type: boolean
+        plan_image:
+          type: string
+          nullable: true
+        plan_url_video:
+          type: string
+          nullable: true
+        is_Discount_Plan:
+          type: boolean
+        is_ncc_plan:
+          type: boolean
+        id_ncc_master_plan:
+          type: integer
+          format: int32
+          nullable: true
+        default_pricing_plan_desc:
+          type: string
+          nullable: true
+        highlight:
+          type: string
+          nullable: true
+        plan_icon:
+          type: string
+          nullable: true
+        bundle_rate:
+          type: number
+          format: double
+          nullable: true
+        is_able_to_bundle:
+          type: boolean
+        billing_system_bundle_plan_code:
+          type: string
+          nullable: true
+        is_recommended:
+          type: boolean
+        not_able_renewals:
+          type: boolean
+        yes_etf_text:
+          type: string
+          nullable: true
+        no_etf_text:
+          type: string
+          nullable: true
+        id_market_inherit_doc_group:
+          type: integer
+          format: int32
+        id_cancellation_fee_type:
+          type: integer
+          format: int32
+        id_rate_code:
+          type: integer
+          format: int32
+          nullable: true
+        id_html_thankyou_page:
+          type: integer
+          format: int32
+          nullable: true
+        active:
+          type: boolean
+        generates_quote_request:
+          type: boolean
+        id_autorenewable_plan:
+          type: integer
+          format: int32
+          nullable: true
+        marketer_id:
+          type: integer
+          format: int32
+          nullable: true
+        id_default_plan:
+          type: integer
+          format: int32
+          nullable: true
+        commission:
+          type: string
+          nullable: true
+        sent_contract_dates:
+          type: boolean
+        traunch_calculation_type:
+          type: boolean
+        not_able_reenrolls:
+          type: boolean
+        recurring_billing_required:
+          type: boolean
+        min_start_date_delay_days:
+          type: integer
+          format: int32
+        term:
+          type: integer
+          format: int32
+          nullable: true
+        terms_text:
+          type: string
+          nullable: true
+        customer_type:
+          type: string
+          nullable: true
+        commodity_name:
+          type: string
+          nullable: true
+        commodity_image:
+          type: string
+          nullable: true
+        commodity_color:
+          type: string
+          nullable: true
+        commodity_priority:
+          type: integer
+          format: int32
+          nullable: true
+        commodity_font_color:
+          type: string
+          nullable: true
+        commodity_clean_per:
+          type: string
+          nullable: true
+        commodity_clean_name:
+          type: string
+          nullable: true
+        uom_text:
+          type: string
+          nullable: true
+        renewable_percent:
+          type: number
+          format: double
+        billing_system_commodity_name:
+          type: string
+          nullable: true
+        rate_type:
+          type: string
+          nullable: true
+        rate_type_priority:
+          type: integer
+          format: int32
+          nullable: true
+        rate_required:
+          type: boolean
+        show_rates_variable_plans:
+          type: boolean
+        show_multiple_rates:
+          type: boolean
+        rate500:
+          type: number
+          format: double
+        rate1000:
+          type: number
+          format: double
+        rate2000:
+          type: number
+          format: double
+        handle_payments:
+          type: boolean
+        show_traunch_dollars:
+          type: boolean
+        decimal_places_to_show:
+          type: integer
+          format: int32
+        divide_montly_fee_by:
+          type: integer
+          format: int32
+        present_divided_monthly_fee:
+          type: boolean
+        plan_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          nullable: true
+        market_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentResponse'
+          nullable: true
+        acceptance_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/AcceptanceOptionResponse'
+          nullable: true
+      additionalProperties: false
+    RecurringBillingResponse:
+      type: object
+      properties:
+        cardType:
+          type: string
+          nullable: true
+        cardNumber:
+          type: string
+          nullable: true
+        cardExpirationDate:
+          type: string
+          nullable: true
+        paymentTypeId:
+          type: integer
+          format: int32
+        routingNumber:
+          type: string
+          nullable: true
+        accountNumber:
+          type: string
+          nullable: true
+        accountType:
+          type: string
+          nullable: true
+        dateFrom:
+          type: string
+          format: date-time
+        paymentProfileToken:
+          type: string
+          nullable: true
+        idEnrollment:
+          type: integer
+          format: int32
+      additionalProperties: false
+    RefreshTokenRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          nullable: true
+        refreshToken:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ResetPasswordRequest:
+      type: object
+      properties:
+        newPassword:
+          type: string
+          nullable: true
+        securityToken:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ResultResponse:
+      type: object
+      properties:
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StateResponse:
+      type: object
+      properties:
+        id_state:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        markets:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketResponse'
+          nullable: true
+      additionalProperties: false
+    StateResponseListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateResponse'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StatementModel:
+      type: object
+      properties:
+        custStatementTkn:
+          type: integer
+          format: int32
+          nullable: true
+        custStatementNum:
+          type: integer
+          format: int32
+          nullable: true
+        mailingDate:
+          type: string
+          format: date-time
+          nullable: true
+        delinquentDate:
+          type: string
+          format: date-time
+          nullable: true
+        totalStmtAmt:
+          type: number
+          format: double
+          nullable: true
+        currentStmtBalance:
+          type: number
+          format: double
+          nullable: true
+        pastDueBalance:
+          type: number
+          format: double
+          nullable: true
+        daysPastDueNum:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    StatementModelListPagedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatementModel'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        pageNumber:
+          type: integer
+          format: int32
+          nullable: true
+        pageSize:
+          type: integer
+          format: int32
+          nullable: true
+        totalPages:
+          type: integer
+          format: int32
+          nullable: true
+        totalRecords:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    StatementSummaryModel:
+      type: object
+      properties:
+        stmtBalanceAmt:
+          type: number
+          format: double
+          nullable: true
+        overdueBalanceAmt:
+          type: number
+          format: double
+          nullable: true
+        lastPaymentAmt:
+          type: number
+          format: double
+          nullable: true
+        nextDueDate:
+          type: string
+          format: date-time
+          nullable: true
+        lastPaymentDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    StatementSummaryModelResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/StatementSummaryModel'
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SwitchTypesUtilitiesInformation:
+      type: object
+      properties:
+        id_switch_types:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TPVReasonsRequest:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        reason:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TPVResultsEnum:
+      enum:
+        - NOT_SENT
+        - PENDING
+        - VERIFIED
+        - FAILED
+        - COULDNT_CONTACT
+      type: string
+      format: ''
+    TermResponse:
+      type: object
+      properties:
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TransactionTypeEnum:
+      enum:
+        - DEPOSIT
+        - ONE_TIME_PAYMENT
+        - RECURRING_BILLING
+        - REFUND
+      type: string
+      format: ''
+    TransferServiceRequest:
+      type: object
+      properties:
+        currentServiceEffectiveDate:
+          type: string
+          nullable: true
+        newServiceStartDate:
+          type: string
+          nullable: true
+        removeMeter:
+          type: boolean
+        paymentProfileToken:
+          type: string
+          nullable: true
+        serviceAddress:
+          $ref: '#/components/schemas/EnrollmentAddress'
+        billingAddress:
+          $ref: '#/components/schemas/EnrollmentAddress'
+      additionalProperties: false
+    TransferServiceResponse:
+      type: object
+      properties:
+        is_near_to_renew:
+          type: boolean
+        open_wizard:
+          type: boolean
+        error:
+          type: boolean
+      additionalProperties: false
+    TransferServiceResponseResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TransferServiceResponse'
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UpdateRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        newPassword:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        alternativeEmail:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        notificationToEmail:
+          type: boolean
+          nullable: true
+        notificationToAlternativeEmail:
+          type: boolean
+          nullable: true
+        language:
+          type: integer
+          format: int32
+        opted_marketing_coms:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    UpdateVerificationRequest:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/TPVResultsEnum'
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/TPVReasonsRequest'
+          nullable: true
+      additionalProperties: false
+    UsageHistoryModel:
+      type: object
+      properties:
+        beginReadDate:
+          type: string
+          format: date-time
+          nullable: true
+        endReadDate:
+          type: string
+          format: date-time
+          nullable: true
+        usageNum:
+          type: number
+          format: double
+          nullable: true
+        usageChargeAmount:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    UsageHistoryModelListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageHistoryModel'
+          nullable: true
+        succeeded:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UserLoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UtilitiesCustomerTypeResponse:
+      type: object
+      properties:
+        id_utility:
+          type: integer
+          format: int32
+        id_customer_type:
+          type: integer
+          format: int32
+        description:
+          type: string
+          nullable: true
+        customer_types:
+          $ref: '#/components/schemas/CustomerTypeResponse'
+      additionalProperties: false
+    UtilitiesInformation:
+      type: object
+      properties:
+        switch_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SwitchTypesUtilitiesInformation'
+          nullable: true
+        sample_path:
+          type: string
+          nullable: true
+        ldc_length:
+          type: integer
+          format: int32
+        ldc_Label:
+          type: string
+          nullable: true
+        sample_bill_label:
+          type: string
+          nullable: true
+        ldc_mask:
+          type: string
+          nullable: true
+        is_tx_market:
+          type: boolean
+      additionalProperties: false
+    UtilityResponse:
+      type: object
+      properties:
+        id_utility:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        formal_name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        logo:
+          type: string
+          nullable: true
+        active:
+          type: boolean
+        id_market:
+          type: integer
+          format: int32
+        sample_bill:
+          type: string
+          nullable: true
+        billing_system_utility_name:
+          type: string
+          nullable: true
+        is_zone_required:
+          type: boolean
+        ldc_length:
+          type: string
+          nullable: true
+        min_credit_score:
+          type: integer
+          format: int32
+          nullable: true
+        divide_montly_fee_by:
+          type: integer
+          format: int32
+        id_credit_check_type:
+          type: integer
+          format: int32
+        phone_number:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+        price_to_compare:
+          type: string
+          nullable: true
+        etf_windows:
+          type: integer
+          format: int32
+        period:
+          type: integer
+          format: int32
+          nullable: true
+        utility_code:
+          type: string
+          nullable: true
+        ldc_only_numbers:
+          type: boolean
+        export_renewals:
+          type: boolean
+        rescission_period:
+          type: integer
+          format: int32
+          nullable: true
+        pool_id:
+          type: string
+          nullable: true
+        churn_indicator:
+          type: integer
+          format: int32
+        expiration_window_indicator:
+          type: integer
+          format: int32
+        wizard_ldc_label:
+          type: string
+          nullable: true
+        wizard_sample_bill_label:
+          type: string
+          nullable: true
+        enrollment_accept_transaction:
+          type: string
+          nullable: true
+        enrollment_reject_transaction:
+          type: string
+          nullable: true
+        group_name:
+          type: string
+          nullable: true
+        renewal_alert:
+          type: boolean
+        renewal_alert_text:
+          type: string
+          nullable: true
+        customer_name_key_required:
+          type: boolean
+        present_divided_monthly_fee:
+          type: boolean
+        customer_name_key_length:
+          type: integer
+          format: int32
+          nullable: true
+        utilities_customer_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/UtilitiesCustomerTypeResponse'
+          nullable: true
+        method_delivery:
+          type: array
+          items:
+            $ref: '#/components/schemas/MethodDeliveryResponse'
+          nullable: true
+        method_contact:
+          type: array
+          items:
+            $ref: '#/components/schemas/MethodContactResponse'
+          nullable: true
+        zipcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZipCodeResponse'
+          nullable: true
+        markets:
+          $ref: '#/components/schemas/MarketResponse'
+      additionalProperties: false
+    ValidateAddressResponse:
+      type: object
+      properties:
+        is_valid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    ValidateEsiidAddressResponse:
+      type: object
+      properties:
+        is_valid:
+          type: boolean
+      additionalProperties: false
+    ValidateNewCustomerResponse:
+      type: object
+      properties:
+        is_valid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiErrorResponse'
+          nullable: true
+      additionalProperties: false
+    ValidationResult:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        error:
+          type: string
+          nullable: true
+        error_msg:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ValidatorElement:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          nullable: true
+        isFieldRequired:
+          type: boolean
+          nullable: true
+        fieldLength:
+          type: integer
+          format: int32
+        validateJavascriptField:
+          type: boolean
+          nullable: true
+        showField:
+          type: boolean
+        defaultValue:
+          type: string
+          nullable: true
+        dependOnFields:
+          type: string
+          nullable: true
+        isFixedLength:
+          type: boolean
+        mask:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ZipCodeResponse:
+      type: object
+      properties:
+        id_zipcode:
+          type: integer
+          format: int32
+        code:
+          type: string
+          nullable: true
+        states:
+          $ref: '#/components/schemas/StateResponse'
+      additionalProperties: false
+    view_address_esiid:
+      type: object
+      properties:
+        id_tdsp_esiid_consolidated:
+          type: string
+          format: uuid
+        esiid:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        zipcode:
+          type: string
+          nullable: true
+        customer_type_id:
+          type: integer
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: "JWT Authorization header using the Bearer scheme. \r\n\r\n Don't need to Enter \"Bearer\""
+      scheme: Bearer
+      bearerFormat: JWT
+security:
+  - Bearer: []

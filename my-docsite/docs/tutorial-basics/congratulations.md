@@ -1,5 +1,8 @@
 ---
 sidebar_position: 6
+sidebar_custom_props:
+  slashid:
+    auth: true
 ---
 
 # Congratulations!
